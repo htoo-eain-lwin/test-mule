@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="3580257e-c7ea-4ce8-8dbf-0287d85929af" >
+		<http:request-connection host="cbtl.cx.local" port="3000"/>
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="512ebb59-7aa0-466d-9391-9b84518a6509" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="invoke_cxFlow" doc:id="405e9850-f3b4-4a85-b387-342c3f2ce215" >
+		<http:listener doc:name="Listener" doc:id="864a79a4-4f4f-4cbe-85b5-9e45fe67fe5b" path="/v1/oauth/token" config-ref="HTTP_Listener_config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="98102ee9-e993-4ac5-9d94-5aab2f64b495" message="before invoke"/>
+		<http:request method="POST" doc:name="Request" doc:id="bf67539f-4981-4823-826e-bfafcebf4fea" config-ref="HTTP_Request_configuration" path="/oauth/token">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"username" : "customer@nimblehq.co",
+	"client_secret" : "KPoEvL76f1pQEGTJM6hW9zHh_--oJJILfmuFIlAgiPY",
+	"grant_type" : "password",
+	"password" : "password",
+	"client_id" : "Gpp6g0xuF3LCLuiXWJabh8b4qoTS0PTWMzmP-0Ib2x4"
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+</mule>
